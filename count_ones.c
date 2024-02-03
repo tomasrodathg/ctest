@@ -1,5 +1,10 @@
 #include "ctest.h"
 
+int main(void)
+{
+	printf("This is the main function\n");
+	return 0;}
+
 int max_number_of_ones(int *nums, int numsSize)
 {
 	int c, x, max;

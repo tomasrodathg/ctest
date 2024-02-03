@@ -28,6 +28,7 @@ void __print_test_summary(void);
 void __set_test_name(char *);
 void __register_tests(char *, size_t,...);
 #define ARRAY_WITH(...) {__VA_ARGS__};
+#ifdef TEST
 #define __TEST(FN,BODY) void FN(void) \
 { \
 	__set_test_name(#FN); \
@@ -39,4 +40,8 @@ void __register_tests(char *, size_t,...);
 	{ \
 		(__register_tests(#MOD_NAME,NTESTS __VA_OPT__(,) __VA_ARGS__)); \
 	} 
+#else
+#define __TEST(FN,BODY)
+#define __TEST_MOD(MOD_NAME,NTESTS,...)
+#endif
 #endif

@@ -1,6 +1,8 @@
 #include "ctest.h"
 #include <errno.h>
 #include <stdarg.h>
+#ifdef TEST
+#define MAX_BUFFER_SIZE 20
 
 typedef void (*testfn)(void);
 
@@ -165,3 +167,20 @@ void __assert_eq_str(char *expected, char *result)
 	(tres->res == SUCCESS) ? t->success_count++ : t->failure_count++;
 	t->results[t->rescount++] = tres;
 }
+
+__attribute__((constructor(101)))
+void setup(void) {
+	if(!(__init_tester(20))) exit(1);
+	printf("Initialized test runner...\n");
+}
+
+int tmain(void)
+{
+	char *test_report;
+	printf("\n");
+	while((test_report = __next_test_report())) printf("%s\n", test_report);
+	__print_test_summary();
+	__cleanup();
+	exit(1);
+}
+#endif
