@@ -87,7 +87,7 @@ cleanup_tester:
 
 static char *build_assertion_msg(void *expected, void *result, rtype msg_type)
 {
-	const char *test_name_intro = "$|| {TEST `", *success_intro = "` } || <SUCCESS>: Successfully compared values ", *failure_intro = "`} || <FAILURE>: Failed to compare values `", *and_sep = "` and `", *end_sep = "'.";
+	const char *test_name_intro = "$|| {TEST `", *success_intro = "` } || <SUCCESS>: Successfully compared values `", *failure_intro = "`} || <FAILURE>: Failed to compare values `", *and_sep = "` and `", *end_sep = "'.";
 	size_t failure_msg_len = strlen(test_name_intro) + strlen(failure_intro) + strlen(and_sep) + strlen(test_name) + strlen(expected) + strlen(result) + strlen(end_sep) + 1,
 	success_msg_len = strlen(test_name_intro) + strlen(success_intro) + strlen(and_sep) + strlen(test_name) + strlen(expected) + strlen(result) + strlen(end_sep) + 1;
 
@@ -125,6 +125,33 @@ struct tresult *createtres(rtype res_type, char *expected, char *result)
 	tres->msg = build_assertion_msg(expected, result, res_type);
 	tres->res = res_type;
 	return tres;
+}
+
+void __assert_true(bool cond, char *expected, char *got)
+{
+	struct tresult *tres;
+	
+	if(!(tres = (cond) ?
+	createtres(SUCCESS, expected, got):
+	createtres(FAILURE, expected, got))) return;
+
+	(tres->res == SUCCESS) ? t->success_count++ : t->failure_count++;
+	t->results[t->rescount++] = tres;
+}
+
+void __assert_eq_int(int expected, int result)
+{
+	struct tresult *tres;
+	char expectedbuf[10], resultbuf[10];
+	sprintf(expectedbuf, "%d", expected);
+	sprintf(resultbuf, "%d", result);
+	
+	if(!(tres = (expected == result) ?
+	createtres(SUCCESS, expectedbuf, resultbuf):
+	createtres(FAILURE, expectedbuf, resultbuf))) return;
+
+	(tres->res == SUCCESS) ? t->success_count++ : t->failure_count++;
+	t->results[t->rescount++] = tres;
 }
 
 void __assert_eq_str(char *expected, char *result)

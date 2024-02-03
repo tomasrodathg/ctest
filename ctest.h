@@ -12,8 +12,10 @@
 #ifndef __ASSERT_MOD
 #define __ASSERT_MOD
 void __assert_eq_str(char *, char *);
-void __assert_true(bool);
+void __assert_eq_int(int, int);
+void __assert_true(bool, char*, char *);
 #define assert_eq_str(A,B) (__assert_eq_str(A,B));
+#define assert_eq_int(A,B) (__assert_eq_int(A,B));
 #endif
 typedef enum {
 	SUCCESS,
@@ -25,10 +27,11 @@ char *__next_test_report(void);
 void __print_test_summary(void);
 void __set_test_name(char *);
 void __register_tests(char *, size_t,...);
+#define ARRAY_WITH(...) {__VA_ARGS__};
 #define __TEST(FN,BODY) void FN(void) \
 { \
 	__set_test_name(#FN); \
-	BODY \
+	BODY; \
 }	
 #define __TEST_MOD(MOD_NAME,NTESTS,...) \
 	__attribute__((constructor(102))) \
