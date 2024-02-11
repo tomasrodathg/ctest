@@ -3,25 +3,14 @@
 int main(void)
 {
 	printf("This is the main function\n");
-	return 0;}
+	return 0;
+}
 
 int max_number_of_ones(int *nums, int numsSize)
 {
-	int c, x, max;
+	int c = 0, x = 0, max = 0;
 	if(numsSize == 1) return nums[0] == 1;
-
-	x = max = c = 0;
-	while(numsSize >= 0) {
-		x = nums[--numsSize];
-		if(x == 1) goto count;
-		if(x == 0) c = 0;
-		continue;
-
-count:
-	c++;
-	if(c > max) max = c;
-	}
-
+	while(numsSize > 0) (((x = nums[--numsSize]) == 1) ? ((++c >= numsSize && c >= max) ? (max = c) : NULL) : (c > max ? (max = c, c = 0): (c = 0)));
 	return max;
 }
 

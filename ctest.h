@@ -14,6 +14,7 @@
 void __assert_eq_str(char *, char *);
 void __assert_eq_int(int, int);
 void __assert_true(bool, char*, char *);
+#define assert_true(EXPR,A,B) (__assert_true((EXPR),A,B))
 #define assert_eq_str(A,B) (__assert_eq_str(A,B));
 #define assert_eq_int(A,B) (__assert_eq_int(A,B));
 #endif
